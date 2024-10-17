@@ -9,26 +9,24 @@ class MatchGame:
         self.root.attributes("-fullscreen", True)
         self.root.configure(bg="white")
 
-        # En üstte bir başlık ekliyoruz
         self.title_label = tk.Label(self.root, text="Fill in the blanks below with “was” or “were”.", bg="white", fg="black", font=("Arial", 24, "bold"))
         self.title_label.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
 
         self.canvas_frame = tk.Frame(self.root, width=800, height=600, bg="lightblue")
         self.canvas_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-        # "was" etiketlerini listeye ekliyoruz
-        self.was_labels = []  # Etiketleri listeye eklemek için liste tanımlıyoruz
-        self.were_labels = []  # Etiketleri listeye eklemek için liste tanımlıyoruz
+        self.was_labels = []
+        self.were_labels = []
 
         for i in range(6):
          was_label = tk.Label(self.canvas_frame, text="was", bg="lightgray", padx=25, pady=12, relief="solid", bd=2, font=("Arial", 18))
-         was_label.place(x=1150 + i*2, y=200 + i*10)  # Hafif aralıklarla üst üste ekliyorum
-         self.was_labels.append(was_label)  # Listeye ekliyoruz
+         was_label.place(x=1150 + i*2, y=200 + i*10)
+         self.was_labels.append(was_label)
 
         for i in range(6):
           were_label = tk.Label(self.canvas_frame, text="were", bg="lightgray", padx=25, pady=12, relief="solid", bd=2, font=("Arial", 18))
           were_label.place(x=1150 + i*2, y=350 + i*10)
-          self.were_labels.append(were_label)  # Listeye ekliyoruz
+          self.were_labels.append(were_label)
 
 
         self.paragraphs = [
@@ -51,7 +49,6 @@ class MatchGame:
             "were": [1, 3, 5, 7, 9]
         }
 
-        # "was" ve "were" etiketlerine sürüklenme işlevi ekliyoruz
         for label in self.was_labels:
          label.bind("<Button-1>", self.start_drag)
          label.bind("<B1-Motion>", self.on_drag)
@@ -67,14 +64,14 @@ class MatchGame:
         self.drop_labels = []
         for i, paragraph in enumerate(self.paragraphs):
             label1 = tk.Label(self.canvas_frame, text=paragraph.split("____")[0], bg="white", padx=20, pady=12, font=("Arial", 18))
-            label1.grid(row=i, column=0, sticky="e", padx=(100, 5))
+            label1.grid(row=i, column=0, sticky="e", padx=(100, 2))
 
             drop_label = tk.Label(self.canvas_frame, text="____", bg="lightblue", width=12, padx=20, pady=12, relief="solid", bd=2, font=("Arial", 18))
-            drop_label.grid(row=i, column=1, padx=20, pady=10)
+            drop_label.grid(row=i, column=1, padx=20, pady=2)
             self.drop_labels.append(drop_label)
 
             label2 = tk.Label(self.canvas_frame, text=paragraph.split("____")[1], bg="white", padx=25, pady=12, font=("Arial", 18))
-            label2.grid(row=i, column=2, sticky="w", padx=(5, 200))
+            label2.grid(row=i, column=2, sticky="w", padx=(2, 200))
 
         button_width = 20
 
@@ -110,11 +107,10 @@ class MatchGame:
         if self.is_overlapping(label, drop_label):
             drop_label.config(text=label.cget("text"), bg="lightblue")
             placed = True
-            label.place_forget()  # Remove the word from its original location
+            label.place_forget()
             break
 
       if not placed:
-        # Return the word to its original position
         if label in self.was_labels:
             label.place(x=1150, y=200 + self.was_labels.index(label)*10)
         elif label in self.were_labels:
@@ -139,12 +135,11 @@ class MatchGame:
     def reset_game(self):
      for drop_label in self.drop_labels:
         drop_label.config(text="____", bg="lightblue")
-            # was_labels'i eski pozisyonlarına geri koy
      for i, label in enumerate(self.was_labels):
-        label.place(x=1150, y=200 + i*10)  # Orijinal pozisyonlarına döndür
+        label.place(x=1150, y=200 + i*10)
 
      for i, label in enumerate(self.were_labels):
-        label.place(x=1150, y=350 + i*10)  # Orijinal pozisyonlarına döndür
+        label.place(x=1150, y=350 + i*10)
 
 
     def exit_game(self):
